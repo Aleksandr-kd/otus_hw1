@@ -16,22 +16,17 @@ public class AddAnimal {
         System.out.println("Добавление нового животного");
 
         ReadName readName = new ReadName();
-        readName.readName(scanner);
         String name = readName.readName(scanner);
 
         ReadNumber readNumber = new ReadNumber();
-        readNumber.readNumber(scanner, "возраст");
         int age = readNumber.readNumber(scanner, "возраст");
 
-        readNumber.readNumber(scanner, "вес");
         int weight = readNumber.readNumber(scanner, "вес");
 
         ReadColor readColor = new ReadColor();
-        readColor.readColor(scanner);
         ColorData color = readColor.readColor(scanner);
 
         ReadType readAnimalType = new ReadType();
-        readAnimalType.readType(scanner);
         AnimalTypeData type = readAnimalType.readType(scanner);
 
         AnimalFactory factory = new AnimalFactory(name, age, weight, color, type);
