@@ -4,7 +4,7 @@ import data.AnimalTypeData;
 import data.ColorData;
 
 
-public abstract class Animal {
+public class Animal {
     private String name;
     private int age;
     private int weight;
@@ -17,6 +17,13 @@ public abstract class Animal {
         this.weight = weight;
         this.color = color;
         this.type = type;
+    }
+
+    public Animal(long id, String name, int age, int weight, String color, String type) {
+    }
+
+    public Animal() {
+
     }
 
     public AnimalTypeData getType() {
@@ -62,7 +69,7 @@ public abstract class Animal {
 
     public String toString() {
         return String.format("Привет! Меня зовут %s, мне %d %s, я вешу %d кг, мой цвет- %s.", name, age, getAgeCase(),
-                weight, color.getName());
+                weight, color);
     }
 }
-
+//                weight, color.getName());

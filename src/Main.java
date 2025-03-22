@@ -1,8 +1,11 @@
 import animals.Animal;
+import dao.AbsTable;
+import dao.AnimalTable;
 import data.CommandsData;
 import factory.AddAnimal;
 import factory.FindAnimalsByColor;
 import factory.FindAnimalsByType;
+import utils.ConnectionManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +18,12 @@ public class Main {
 
 
     public static void main(String[] args) {
+
+        AnimalTable table = new AnimalTable();
+        table.create("Animals");
+
+//        System.out.println(table.findByType("duck"));
+
 
         Scanner scanner = new Scanner(System.in);
 
