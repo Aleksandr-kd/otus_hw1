@@ -1,29 +1,27 @@
 import animals.Animal;
-import dao.AbsTable;
-import dao.AnimalTable;
+import tables.AbsTable;
+import tables.AnimalTable;
 import data.CommandsData;
 import factory.AddAnimal;
 import factory.FindAnimalsByColor;
 import factory.FindAnimalsByType;
-import utils.ConnectionManager;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+/**, чтобы она сохраняла животных в БД.
+ , чтобы она получала списки животных из БД.
+ Добавить в программу возможность редактирования животных.
+ вывода животных по (тип животного).*/
 
 
 public class Main {
 
     private static List<Animal> animalList = new ArrayList<>();
-
-
-    public static void main(String[] args) {
-
-        AnimalTable table = new AnimalTable();
-        table.create("Animals");
-
-//        System.out.println(table.findByType("duck"));
-
+    
+    public static void main(String[] args) throws SQLException, IOException {
 
         Scanner scanner = new Scanner(System.in);
 

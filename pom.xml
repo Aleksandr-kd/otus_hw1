@@ -14,6 +14,7 @@
         <maven.compiler.target>23</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <mysql.driver.version>8.0.33</mysql.driver.version>
+        <maven.exec.plugin.version>1.6.0</maven.exec.plugin.version>
     </properties>
 
     <!-- Зависимости -->
@@ -24,4 +25,17 @@
             <version>${mysql.driver.version}</version>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>${maven.exec.plugin.version}</version>
+                <configuration>
+                    <mainClass>Main</mainClass>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
