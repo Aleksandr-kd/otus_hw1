@@ -12,7 +12,7 @@ public class FilePropertiesReader implements IPropertyReader {
     @Override
     public Map<String, String> getSettings() throws IOException {
         Properties properties = new Properties();
-        properties.load(Files.newInputStream(Paths.get(System.getProperty("user.dir") + "src/resources/db.properties")));
+        properties.load(Files.newInputStream(Paths.get(System.getProperty("user.dir") + "/src/resources/db.properties")));
 
         Map<String, String> settings = new HashMap<>();
 

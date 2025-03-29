@@ -25,7 +25,7 @@ public class MySqlConnectorDb implements IDataBase {
 
     public ResultSet requestExecute(String sqlRequest) throws SQLException, IOException {
         openConnectionDb();
-        statement.execute(sqlRequest);
+        statement.executeUpdate(sqlRequest);
         return null;
     }
 

@@ -1,73 +1,45 @@
 package tables;
 
 import animals.Animal;
+import data.AnimalTypeData;
 import db.IDataBase;
 
-
 import java.io.IOException;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
 
 public class AnimalTable extends AbsTable {
-    private IDataBase iDataBase = null;
 
-    protected String tableName;
-    protected Map<String, String> columns = new HashMap<>();
+    public AnimalTable(IDataBase iDataBase) {
+        super(iDataBase, "animals");
+    }
 
+    public void createTable() throws SQLException, IOException {
+        String sql = "CREATE TABLE IF NOT EXISTS animals (" +
+                "id INT AUTO_INCREMENT PRIMARY KEY, " +
+                "name VARCHAR(15), " +
+                "type VARCHAR(15), " +
+                "age INT, " +
+                "weight INT, " +
+                "color VARCHAR(15))";
+        iDataBase.executeUpdate(sql);
+    }
 
-    public AnimalTable() throws SQLException, IOException {
+    public void add(Animal animal) throws SQLException, IOException {
+        String sql = String.format(
+                "INSERT INTO animals (name, type, age, weight, color) VALUES ('%s', '%s', %d, %d, '%s')",
+                animal.getName(), animal.getType().name(), animal.getAge(), animal.getWeight(), animal.getColor().name());
+        iDataBase.executeUpdate(sql);
+    }
 
+    public List<Animal> getAll() throws SQLException, IOException {
+        return mapResultSetToAnimals(
+                iDataBase.requestExecuteWithReturned("SELECT * FROM animals"));
+    }
 
-        super("animal");
-        columns.put("id", "bigint PRIMARY KEY AUTO_INCREMENT");
-        columns.put("type", "varchar(15)");
-        columns.put("name", "varchar(15)");
-        columns.put("color", "varchar(15)");
-        columns.put("weight", "int");
-        columns.put("age", "int");
-
-//        iDataBase = new MySqlConnectorDb();
-
-
-        public void createTable (String animals) throws SQLException, IOException {
-            String sqlRequest = String.format("CREATE TABLE IF NOT EXISTS %s (%s)", this.tableName, convertMapColumnsToString());
-            iDataBase.executeUpdate(sqlRequest);
-        }
-
-        public List<Animal> findAll () {
-            List<Animal> animals = new ArrayList<>();
-            try {
-                try (ResultSet rs = iDataBase.requestExecuteWithReturned("SELECT * FROM " + tableName);) {
-                    while (rs.next()) {
-                        long id = rs.getLong("id");
-                        String name = rs.getString("name");
-                        int age = rs.getInt("age");
-                        int weight = rs.getInt("weight");
-                        String color = rs.getString("color");
-                        String type = rs.getString("type");
-
-                        Animal animal = new Animal(id, name, age, weight, color, type);
-                        animals.add(animal);
-                    }
-                }
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-            return animals;
-        }
-
-        private String convertMapColumnsToString () {
-            String result = "";
-            for (Map.Entry<String, String> el : columns.entrySet()) {
-                result += el.getKey() + " " + el.getValue() + ",";
-            }
-            result = result.substring(0, result.length() - 1);
-            return result;
-        }
+    public List<Animal> findByType(AnimalTypeData type) throws SQLException, IOException {
+        return mapResultSetToAnimals(
+                iDataBase.requestExecuteWithReturned(
+                        String.format("SELECT * FROM animals WHERE type = '%s'", type.name())));
     }
 }

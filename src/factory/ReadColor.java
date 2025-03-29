@@ -1,7 +1,7 @@
 package factory;
 
 import data.ColorData;
-import java.util.Arrays;
+
 import java.util.Scanner;
 
 

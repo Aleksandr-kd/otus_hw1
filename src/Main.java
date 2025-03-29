@@ -1,44 +1,39 @@
 import animals.Animal;
-import tables.AbsTable;
-import tables.AnimalTable;
 import data.CommandsData;
+import db.IDataBase;
+import db.MySqlConnectorDb;
 import factory.AddAnimal;
-import factory.FindAnimalsByColor;
 import factory.FindAnimalsByType;
+import tables.AnimalTable;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-/**, чтобы она сохраняла животных в БД.
- , чтобы она получала списки животных из БД.
- Добавить в программу возможность редактирования животных.
- вывода животных по (тип животного).*/
-
 
 public class Main {
+    private static final Scanner scanner = new Scanner(System.in);
+    private static final IDataBase db = new MySqlConnectorDb();
+    private static final AnimalTable animalTable = new AnimalTable(db);
 
-    private static List<Animal> animalList = new ArrayList<>();
-    
+
     public static void main(String[] args) throws SQLException, IOException {
 
-        Scanner scanner = new Scanner(System.in);
+        animalTable.createTable();
 
-        List<String> namesStr = new ArrayList<>();
-        for (CommandsData commandsData : CommandsData.values()) {
-            namesStr.add(commandsData.name().toLowerCase());
+        List<String> nameStr = new ArrayList<>();
+        for (CommandsData cmd : CommandsData.values()) {
+            nameStr.add(cmd.name().toLowerCase());
         }
 
         while (true) {
-            System.out.println(String.format("Введите команду: %s", String.join("/", namesStr)));
-
-            String userCommand = scanner.next().trim();
-            String userCommandUpperCase = userCommand.toUpperCase();
+            System.out.println("Введите команду: " + String.join("/", nameStr));
+            String userCommand = scanner.next().trim().toUpperCase();
 
             boolean isCommandExist = false;
             for (CommandsData commandsData : CommandsData.values()) {
-                if (userCommandUpperCase.equals(commandsData.name())) {
+                if (userCommand.equals(commandsData.name())) {
                     isCommandExist = true;
                     break;
                 }
@@ -49,53 +44,43 @@ public class Main {
                 continue;
             }
 
-            switch (CommandsData.valueOf(userCommandUpperCase)) {
+            switch (CommandsData.valueOf(userCommand)) {
                 case ADD: {
-                    AddAnimal addAnimal = new AddAnimal();
-                    addAnimal.addAnimal(scanner, animalList);
+                    AddAnimal addAnimal = new AddAnimal(db);
+                    Animal animal = addAnimal.addAnimal(scanner);
+                    animalTable.add(animal);
                     break;
                 }
                 case LIST: {
-                    if (animalList.isEmpty()) {
+                    List<Animal> animals = animalTable.getAll();
+                    if (animals.isEmpty()) {
                         System.out.println("Список пустой.");
                     }
-                    for (Animal animal : animalList) {
+                    for (Animal animal : animals) {
                         System.out.println(animal);
                     }
+                    break;
                 }
-                break;
-                case FIND_ANIMALS_BY_COLOR: {
-                    FindAnimalsByColor findAnimalsByColor = new FindAnimalsByColor();
-                    List<Animal> foundAnimals = findAnimalsByColor.findAnimalsByColor(scanner, animalList);
-
-                    if (foundAnimals.isEmpty()) {
-                        System.out.println("Не найдено с таким цветом");
-                    } else {
-                        System.out.println("Найденные животные:");
-                        for (Animal animal : foundAnimals) {
-                            System.out.println(animal.toString());
-                        }
-                    }
-                }
-                break;
                 case FIND_ANIMALS_BY_TYPE: {
-                    FindAnimalsByType findAnimalsByType = new FindAnimalsByType();
-                    List<Animal> foundAnimalsType = findAnimalsByType.findAnimalsByType(scanner, animalList);
-
-                    if (foundAnimalsType.isEmpty()) {
+                    FindAnimalsByType find = new FindAnimalsByType();
+                    List<Animal> foundAnimals = find.findAnimalsByType(scanner, animalTable);
+                    if (foundAnimals.isEmpty()) {
                         System.out.println("Не найдено с таким типом");
                     } else {
                         System.out.println("Найденные животные:");
-                        for (Animal animal : foundAnimalsType) {
-                            System.out.println(animal.toString());
+                        for (Animal animal : foundAnimals) {
+                            System.out.println(animal);
                         }
                     }
+                    break;
                 }
-                break;
                 case EXIT: {
+                    db.close();
+                    scanner.close();
                     System.exit(0);
                 }
             }
         }
     }
 }
+

@@ -11,6 +11,8 @@ public class Animal {
     private ColorData color;
     private AnimalTypeData type;
 
+
+
     public Animal(String name, int age, int weight, ColorData color, AnimalTypeData type) {
         this.name = name;
         this.age = age;
@@ -19,19 +21,36 @@ public class Animal {
         this.type = type;
     }
 
-    public Animal(long id, String name, int age, int weight, String color, String type) {
-    }
+//    public Animal(String name, AnimalTypeData type, int age, int weight, ColorData color){
+//        this.name = name;
+//        this.type = type;
+//        this.age = age;
+//        this.weight = weight;
+//        this.color = color;
+//    }
 
-    public Animal() {
-
-    }
-
+//
+//    public Integer getId() {
+//        return this.id;
+//    }
     public AnimalTypeData getType() {
         return type;
     }
 
     public ColorData getColor() {
         return color;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public int getWeight() {
+        return weight;
     }
 
     public void say() {
@@ -72,4 +91,3 @@ public class Animal {
                 weight, color);
     }
 }
-//                weight, color.getName());

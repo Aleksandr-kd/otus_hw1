@@ -4,14 +4,20 @@ import animals.Animal;
 import animals.birds.IFlying;
 import data.AnimalTypeData;
 import data.ColorData;
+import db.IDataBase;
+import tables.AnimalTable;
 
-import java.util.List;
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Scanner;
 
 
 public class AddAnimal {
 
-    public void addAnimal(Scanner scanner, List<Animal> animalList) {
+    public AddAnimal(IDataBase db) {
+    }
+
+    public Animal addAnimal(Scanner scanner) throws SQLException, IOException {
 
         System.out.println("Добавление нового животного");
 
@@ -20,7 +26,6 @@ public class AddAnimal {
 
         ReadNumber readNumber = new ReadNumber();
         int age = readNumber.readNumber(scanner, "возраст");
-
         int weight = readNumber.readNumber(scanner, "вес");
 
         ReadColor readColor = new ReadColor();
@@ -33,7 +38,6 @@ public class AddAnimal {
         Animal animal = factory.createAnimal(type);
 
         if (animal != null) {
-            animalList.add(animal);
             animal.say();
             animal.drink();
             animal.eat();
@@ -42,5 +46,6 @@ public class AddAnimal {
         if (animal instanceof IFlying) {
             ((IFlying) animal).fly();
         }
+        return animal;
     }
 }

@@ -1,27 +1,23 @@
+
 package factory;
 
 import animals.Animal;
 import data.AnimalTypeData;
-import java.util.ArrayList;
+import tables.AnimalTable;
+
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
 
-public class FindAnimalsByType {
+    public class FindAnimalsByType {
 
-    public List<Animal> findAnimalsByType(Scanner scanner, List<Animal> animalList) {
+        public List<Animal> findAnimalsByType(Scanner scanner, AnimalTable animalTable) throws SQLException, IOException {
+            System.out.println("Введите тип животного для поиска");
 
-        System.out.println("Введите тип животного для поиска");
+            ReadType typeData = new ReadType();
+            AnimalTypeData type = typeData.readType(scanner);
 
-        ReadType typeData = new ReadType();
-        AnimalTypeData type = typeData.readType(scanner);
-
-        List<Animal> result = new ArrayList<>();
-
-        for (Animal animal : animalList) {
-            if (animal.getType().equals(type)) {
-                result.add(animal);
-            }
+            return animalTable.findByType(type);
         }
-        return result;
     }
-}
