@@ -1,3 +1,5 @@
+package main;
+
 import animals.Animal;
 import data.CommandsData;
 import db.IDataBase;
