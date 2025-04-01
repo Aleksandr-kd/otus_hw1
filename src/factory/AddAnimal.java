@@ -5,10 +5,7 @@ import animals.birds.IFlying;
 import data.AnimalTypeData;
 import data.ColorData;
 import db.IDataBase;
-import tables.AnimalTable;
 
-import java.io.IOException;
-import java.sql.SQLException;
 import java.util.Scanner;
 
 
@@ -17,7 +14,7 @@ public class AddAnimal {
     public AddAnimal(IDataBase db) {
     }
 
-    public Animal addAnimal(Scanner scanner) throws SQLException, IOException {
+    public Animal addAnimal(Scanner scanner) {
 
         System.out.println("Добавление нового животного");
 
@@ -38,11 +35,13 @@ public class AddAnimal {
         Animal animal = factory.createAnimal(type);
 
         if (animal != null) {
+            System.out.println(animal.toShortString());
             animal.say();
             animal.drink();
             animal.eat();
             animal.go();
         }
+
         if (animal instanceof IFlying) {
             ((IFlying) animal).fly();
         }

@@ -4,6 +4,7 @@ import db.IDataBase;
 import db.MySqlConnectorDb;
 import factory.AddAnimal;
 import factory.FindAnimalsByType;
+import services.AnimalService;
 import tables.AnimalTable;
 
 import java.io.IOException;
@@ -12,11 +13,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+
 public class Main {
     private static final Scanner scanner = new Scanner(System.in);
     private static final IDataBase db = new MySqlConnectorDb();
     private static final AnimalTable animalTable = new AnimalTable(db);
-
 
     public static void main(String[] args) throws SQLException, IOException {
 
@@ -29,7 +30,7 @@ public class Main {
 
         while (true) {
             System.out.println("Введите команду: " + String.join("/", nameStr));
-            String userCommand = scanner.next().trim().toUpperCase();
+            String userCommand = scanner.nextLine().trim().toUpperCase();
 
             boolean isCommandExist = false;
             for (CommandsData commandsData : CommandsData.values()) {
@@ -53,6 +54,7 @@ public class Main {
                 }
                 case LIST: {
                     List<Animal> animals = animalTable.getAll();
+                    animalTable.getAll();
                     if (animals.isEmpty()) {
                         System.out.println("Список пустой.");
                     }
@@ -61,7 +63,7 @@ public class Main {
                     }
                     break;
                 }
-                case FIND_ANIMALS_BY_TYPE: {
+                case FIND: {
                     FindAnimalsByType find = new FindAnimalsByType();
                     List<Animal> foundAnimals = find.findAnimalsByType(scanner, animalTable);
                     if (foundAnimals.isEmpty()) {
@@ -74,13 +76,17 @@ public class Main {
                     }
                     break;
                 }
+                case UPDATE: {
+                    IDataBase iDataBase = new MySqlConnectorDb();
+                    AnimalService animalService = new AnimalService(iDataBase);
+                    animalService.update(scanner);
+                    break;
+                }
                 case EXIT: {
                     db.close();
-                    scanner.close();
                     System.exit(0);
                 }
             }
         }
     }
 }
-

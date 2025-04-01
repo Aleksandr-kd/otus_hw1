@@ -5,13 +5,21 @@ import data.ColorData;
 
 
 public class Animal {
+    private int id;
     private String name;
     private int age;
     private int weight;
     private ColorData color;
     private AnimalTypeData type;
 
-
+    public Animal(int id, String name, int age, int weight, ColorData color, AnimalTypeData type) {
+        this.id = id;
+        this.name = name;
+        this.age = age;
+        this.weight = weight;
+        this.color = color;
+        this.type = type;
+    }
 
     public Animal(String name, int age, int weight, ColorData color, AnimalTypeData type) {
         this.name = name;
@@ -21,18 +29,6 @@ public class Animal {
         this.type = type;
     }
 
-//    public Animal(String name, AnimalTypeData type, int age, int weight, ColorData color){
-//        this.name = name;
-//        this.type = type;
-//        this.age = age;
-//        this.weight = weight;
-//        this.color = color;
-//    }
-
-//
-//    public Integer getId() {
-//        return this.id;
-//    }
     public AnimalTypeData getType() {
         return type;
     }
@@ -43,6 +39,10 @@ public class Animal {
 
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public int getAge() {
@@ -86,8 +86,13 @@ public class Animal {
         return "лет";
     }
 
-    public String toString() {
+    public String toShortString() {
         return String.format("Привет! Меня зовут %s, мне %d %s, я вешу %d кг, мой цвет- %s.", name, age, getAgeCase(),
-                weight, color);
+                weight, color.getName());
+    }
+
+    public String toString() {
+        return String.format(id + " Привет! Меня зовут %s, мне %d %s, я вешу %d кг, мой цвет- %s.", name, age, getAgeCase(),
+                weight, color.getName());
     }
 }

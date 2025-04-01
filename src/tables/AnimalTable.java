@@ -5,8 +5,10 @@ import data.AnimalTypeData;
 import db.IDataBase;
 
 import java.io.IOException;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+
 
 public class AnimalTable extends AbsTable {
 
@@ -33,13 +35,20 @@ public class AnimalTable extends AbsTable {
     }
 
     public List<Animal> getAll() throws SQLException, IOException {
-        return mapResultSetToAnimals(
-                iDataBase.requestExecuteWithReturned("SELECT * FROM animals"));
+        String sql = "SELECT * FROM animals";
+        ResultSet resultSet = iDataBase.requestExecute(sql);
+        return resultToAnimals(resultSet);
     }
 
     public List<Animal> findByType(AnimalTypeData type) throws SQLException, IOException {
-        return mapResultSetToAnimals(
-                iDataBase.requestExecuteWithReturned(
-                        String.format("SELECT * FROM animals WHERE type = '%s'", type.name())));
+        String sql = String.format("SELECT * FROM animals WHERE type = '%s'", type.name());
+        ResultSet resultSet = iDataBase.requestExecute(sql);
+        return resultToAnimals(resultSet);
+    }
+
+    public boolean update(int id, String newName) throws SQLException, IOException {
+        String sql = String.format("UPDATE animals SET name = '%s' WHERE id = %d", newName, id);
+        int rowsAffected = iDataBase.executeUpdate(sql);
+        return rowsAffected > 0;
     }
 }

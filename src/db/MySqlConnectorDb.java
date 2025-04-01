@@ -11,9 +11,8 @@ public class MySqlConnectorDb implements IDataBase {
     private static Connection connection = null;
     private static Statement statement = null;
 
-
     private void openConnectionDb() throws SQLException, IOException {
-        if (connection == null){
+        if (connection == null) {
             Map<String, String> settings = new FilePropertiesReader().getSettings();
             connection = DriverManager.getConnection(settings.get("url"), settings.get("login"), settings.get("password"));
         }
@@ -25,18 +24,13 @@ public class MySqlConnectorDb implements IDataBase {
 
     public ResultSet requestExecute(String sqlRequest) throws SQLException, IOException {
         openConnectionDb();
-        statement.executeUpdate(sqlRequest);
-        return null;
-    }
-
-    public ResultSet requestExecuteWithReturned(String sqlRequest) throws SQLException, IOException {
-        openConnectionDb();
         return statement.executeQuery(sqlRequest);
     }
 
-    public void executeUpdate(String query) throws SQLException, IOException {
+    public int executeUpdate(String query) throws SQLException, IOException {
         openConnectionDb();
-        statement.executeUpdate(query);
+        return statement.executeUpdate(query);
+
     }
 
     public void close() throws SQLException {

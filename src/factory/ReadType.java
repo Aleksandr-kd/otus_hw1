@@ -12,7 +12,7 @@ public class ReadType {
             System.out.println("- " + type.getName());
         }
         while (true) {
-            String typeInput = scanner.next().trim();
+            String typeInput = scanner.nextLine().trim();
             for (AnimalTypeData type : AnimalTypeData.values()) {
                 if (type.getName().equalsIgnoreCase(typeInput)) {
                     return type;
@@ -22,4 +22,3 @@ public class ReadType {
         }
     }
 }
-
