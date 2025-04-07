@@ -12,13 +12,13 @@ import java.util.Scanner;
 
 public class AnimalService {
     private NumberTools idNumber;
-    private AnimalTable updateName;
-    private UpdateAnimalValidator validatorName;
+    private AnimalTable animalTable;
+    private UpdateAnimalValidator validatorField;
 
     public AnimalService(IDataBase iDataBase) {
         this.idNumber = new NumberTools();
-        this.updateName = new AnimalTable(iDataBase);
-        this.validatorName = new UpdateAnimalValidator();
+        this.animalTable = new AnimalTable(iDataBase);
+        this.validatorField = new UpdateAnimalValidator();
     }
 
     public void update(Scanner scanner) throws SQLException, IOException {
@@ -32,17 +32,26 @@ public class AnimalService {
             }
             int id = Integer.parseInt(idInput);
 
-            String newName = validatorName.getValidName(scanner);
-            if (newName == null) {
-                continue;
+            String[] updateData = validatorField.getValidatorFieldUpdate(scanner);
+            String field = updateData[0];
+            String value = updateData[1];
+
+            boolean isUpdated;
+            try {
+                if (field.toLowerCase().equals("name")){
+                    isUpdated = animalTable.updateName(id, value);
+                }else {
+                    int age = Integer.parseInt(value);
+                    isUpdated = animalTable.updateAge(id, age);
+                }
+            } catch (NumberFormatException e) {
+                throw new RuntimeException(e);
             }
 
-            boolean updated = updateName.update(id, newName);
-
-            if (!updated) {
+            if (!isUpdated) {
                 System.out.println("Животное с ID " + id + " не найдено. C помощью команды LIST можно посмотреть ID животных.\n");
             } else {
-                System.out.println("Имя животного с ID " + id + " успешно изменено на " + newName + ".");
+                System.out.println("Животного с ID " + id + " успешно обновлен.");
             }
             break;
         }

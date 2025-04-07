@@ -46,8 +46,14 @@ public class AnimalTable extends AbsTable {
         return resultToAnimals(resultSet);
     }
 
-    public boolean update(int id, String newName) throws SQLException, IOException {
+    public boolean updateName(int id, String newName) throws SQLException, IOException {
         String sql = String.format("UPDATE animals SET name = '%s' WHERE id = %d", newName, id);
+        int rowsAffected = iDataBase.executeUpdate(sql);
+        return rowsAffected > 0;
+    }
+
+    public boolean updateAge(int id, int newAge) throws SQLException, IOException {
+        String sql = String.format("UPDATE animals SET age = '%d' WHERE id = %d", newAge, id);
         int rowsAffected = iDataBase.executeUpdate(sql);
         return rowsAffected > 0;
     }

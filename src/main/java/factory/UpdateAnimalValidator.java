@@ -4,14 +4,19 @@ import java.util.Scanner;
 
 
 public class UpdateAnimalValidator {
+    ReadNumber readNumber = new ReadNumber();
+    ReadName readName = new ReadName();
 
-    public String getValidName(Scanner scanner) {
-        System.out.print("Введите новое имя животного: \n");
-        String name = scanner.nextLine().trim();
-        if (name.isEmpty()) {
-            System.out.println("Имя не может быть пустым\n");
-            return null;
+    public String[] getValidatorFieldUpdate(Scanner scanner) {
+        System.out.print("Введите название поля для обновления (name или age): \n");
+        String field = scanner.nextLine().trim().toLowerCase();
+
+        String fieldUpdate;
+        if ("age".equals(field)){
+            fieldUpdate = String.valueOf(readNumber.readNumber(scanner, "возраст"));
+        }else {
+            fieldUpdate = readName.readName(scanner);
         }
-        return name;
+        return new String[]{field, fieldUpdate};
     }
 }
