@@ -1,7 +1,8 @@
 package services;
 
+import animals.Animal;
 import db.IDataBase;
-import factory.UpdateAnimalValidator;
+import factory.AddAnimal;
 import tables.AnimalTable;
 import tools.NumberTools;
 
@@ -13,12 +14,12 @@ import java.util.Scanner;
 public class AnimalService {
     private NumberTools idNumber;
     private AnimalTable animalTable;
-    private UpdateAnimalValidator validatorField;
+    private AddAnimal addAnimal;
 
     public AnimalService(IDataBase iDataBase) {
         this.idNumber = new NumberTools();
         this.animalTable = new AnimalTable(iDataBase);
-        this.validatorField = new UpdateAnimalValidator();
+        this.addAnimal = new AddAnimal(iDataBase);
     }
 
     public void update(Scanner scanner) throws SQLException, IOException {
@@ -32,24 +33,21 @@ public class AnimalService {
             }
             int id = Integer.parseInt(idInput);
 
-            String[] updateData = validatorField.getValidatorFieldUpdate(scanner);
-            String field = updateData[0];
-            String value = updateData[1];
+            System.out.println("Введите новые данные для животного:");
+            Animal updatedAnimal = addAnimal.addAnimal(scanner);
 
-            boolean isUpdated;
-            try {
-                if (field.toLowerCase().equals("name")){
-                    isUpdated = animalTable.updateName(id, value);
-                }else {
-                    int age = Integer.parseInt(value);
-                    isUpdated = animalTable.updateAge(id, age);
-                }
-            } catch (NumberFormatException e) {
-                throw new RuntimeException(e);
-            }
+            boolean isUpdated = animalTable.updateAllData(
+                    id,
+                    updatedAnimal.getName(),
+                    updatedAnimal.getAge(),
+                    updatedAnimal.getWeight(),
+                    updatedAnimal.getColor().name(),
+                    updatedAnimal.getType().name()
+            );
 
             if (!isUpdated) {
-                System.out.println("Животное с ID " + id + " не найдено. C помощью команды LIST можно посмотреть ID животных.\n");
+                System.out.println("Животное с ID " + id + " не найдено. C помощью команды LIST можно посмотреть " +
+                        "ID животных.\n");
             } else {
                 System.out.println("Животного с ID " + id + " успешно обновлен.");
             }

@@ -52,8 +52,12 @@ public class AnimalTable extends AbsTable {
         return rowsAffected > 0;
     }
 
-    public boolean updateAge(int id, int newAge) throws SQLException, IOException {
-        String sql = String.format("UPDATE animals SET age = '%d' WHERE id = %d", newAge, id);
+    public boolean updateAllData(int id, String name, int age, int weight, String color, String type)
+            throws SQLException, IOException {
+        String sql = String.format(
+                "UPDATE animals SET name = '%s', age = %d, weight = %d, color = '%s', type = '%s' WHERE id = %d",
+                name, age, weight, color, type, id
+        );
         int rowsAffected = iDataBase.executeUpdate(sql);
         return rowsAffected > 0;
     }
