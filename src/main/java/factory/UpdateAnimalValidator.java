@@ -8,15 +8,18 @@ public class UpdateAnimalValidator {
     ReadName readName = new ReadName();
 
     public String[] getValidatorFieldUpdate(Scanner scanner) {
-        System.out.print("Введите название поля для обновления (name или age): \n");
-        String field = scanner.nextLine().trim().toLowerCase();
+        while (true) {
+            System.out.print("Введите название поля для обновления (name или age): \n");
+            String field = scanner.nextLine().trim().toLowerCase();
 
-        String fieldUpdate;
-        if ("age".equals(field)){
-            fieldUpdate = String.valueOf(readNumber.readNumber(scanner, "возраст"));
-        }else {
-            fieldUpdate = readName.readName(scanner);
+            if ("age".equals(field)) {
+                int age = readNumber.readNumber(scanner, "возраст");
+                return new String[]{field, String.valueOf(age)};
+            } else if ("name".equals(field)) {
+                String name = readName.readName(scanner);
+                return new String[]{field, name};
+            }
+            System.out.println("Поле должно быть только 'name или age'");
         }
-        return new String[]{field, fieldUpdate};
     }
 }
